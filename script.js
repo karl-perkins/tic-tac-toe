@@ -14,6 +14,10 @@ function createGameboard() {
 		console.log(gameboard[2].map((cell) => cell.getValue()).join(' | '));
 	}
 
+	function resetBoard() {
+		gameboard.forEach(row => row.forEach(cell => cell.setValue(' ')));
+	}
+
 	function setCellValue(rowId, columnId, value) {
 		gameboard[rowId][columnId].setValue(value);
 	}
@@ -22,7 +26,7 @@ function createGameboard() {
 		return gameboard[rowId][columnId].getValue();
 	}
 
-	return { displayBoard, setCellValue, getCellValue };
+	return { displayBoard, resetBoard, setCellValue, getCellValue };
 }
 
 function createCell() {
@@ -70,7 +74,6 @@ const gameController = (function (name1, name2) {
 			const row = window.prompt(`${activePlayer.name}, choose a row:`);
 			const column = window.prompt(`${activePlayer.name}, choose a column:`);
 			
-
 			gameboard.setCellValue(row, column, activePlayer.marker);
 
 			gameboard.displayBoard();
@@ -82,6 +85,8 @@ const gameController = (function (name1, name2) {
 				console.log(`${activePlayer.name} wins!`);
 			}
 		}
+		
+		gameboard.resetBoard();
 	}
 
 	return { playRound };
