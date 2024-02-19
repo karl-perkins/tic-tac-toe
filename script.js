@@ -71,8 +71,23 @@ const gameController = (function (name1, name2) {
 			activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
 
 			// Add handling for invalid input and check if cell already populated.
-			const row = window.prompt(`${activePlayer.name}, choose a row:`);
-			const column = window.prompt(`${activePlayer.name}, choose a column:`);
+			let row;
+			let column;
+			let isValidInput = false;
+
+			while (!isValidInput) {
+				const validInputs = ['0', '1', '2'];
+				row = window.prompt(`${activePlayer.name}, choose a row:`);
+				column = window.prompt(`${activePlayer.name}, choose a column:`);
+
+				if (!validInputs.includes(row) || !validInputs.includes(column)) {
+					console.log('Invalid Input. Please try again.')
+				} else if (gameboard.getCellValue(row, column) !== ' ') {
+					console.log('Cell already populated. Please try again.')
+				} else {
+					isValidInput = true;
+				}
+			}
 			
 			gameboard.setCellValue(row, column, activePlayer.marker);
 
