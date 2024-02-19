@@ -8,15 +8,13 @@ function createGameboard() {
 		}
 	}
 
-	function displayBoard() {
-		console.log(gameboard[0].map((cell) => cell.getValue()).join(' | '));
-		console.log(gameboard[1].map((cell) => cell.getValue()).join(' | '));
-		console.log(gameboard[2].map((cell) => cell.getValue()).join(' | '));
-	}
-
 	function resetBoard() {
 		gameboard.forEach(row => row.forEach(cell => cell.setValue(' ')));
 	}
+
+	function getBoard() {
+		return gameboard;
+	};
 
 	function setCellValue(rowId, columnId, value) {
 		gameboard[rowId][columnId].setValue(value);
@@ -26,7 +24,7 @@ function createGameboard() {
 		return gameboard[rowId][columnId].getValue();
 	}
 
-	return { displayBoard, resetBoard, setCellValue, getCellValue };
+	return { resetBoard, getBoard, setCellValue, getCellValue };
 }
 
 function createCell() {
@@ -45,8 +43,8 @@ function createPlayer(name, marker) {
 }
 
 const gameController = (function () {
-	const player1Name = prompt("Enter name for 1st player:");
-	const player2Name = prompt("Enter name for 2nd player:");
+	const player1Name = 'karl';//prompt("Enter name for 1st player:");
+	const player2Name = 'simon';//prompt("Enter name for 2nd player:");
 	const gameboard = createGameboard();
 	const players = [ createPlayer(player1Name, 'X'), createPlayer(player2Name, 'O') ];
 	const winCombos = [
@@ -64,48 +62,55 @@ const gameController = (function () {
 		[[0, 0], [1, 1], [2, 2]],
 		[[0, 2], [1, 1], [2, 0]],
 	];
+	
+	let activePlayer;
+	function playRound(row, column) {
+		 activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
 
-	function playRound() {
-		let activePlayer;
-		let isTrue = true;
-		
-		while (isTrue) {
-			activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
-
-			// Add handling for invalid input and check if cell already populated.
-			let row;
-			let column;
-			let isValidInput = false;
-
-			while (!isValidInput) {
-				const validInputs = ['0', '1', '2'];
-				row = window.prompt(`${activePlayer.name}, choose a row:`);
-				column = window.prompt(`${activePlayer.name}, choose a column:`);
-
-				if (!validInputs.includes(row) || !validInputs.includes(column)) {
-					console.log('Invalid Input. Please try again.')
-				} else if (gameboard.getCellValue(row, column) !== ' ') {
-					console.log('Cell already populated. Please try again.')
-				} else {
-					isValidInput = true;
-				}
-			}
-			
-			gameboard.setCellValue(row, column, activePlayer.marker);
-
-			gameboard.displayBoard();
-
-			const isWin = winCombos.some(combo => combo.every(cell => gameboard.getCellValue(cell[0], cell[1]) === activePlayer.marker));
-			if (isWin) {
-				isTrue = false;
-				activePlayer.setWinCount();
-				console.log(`${activePlayer.name} wins!`);
-			}
+		if (gameboard.getCellValue(row, column) !== ' ') {
+			alert('Cell already populated. Please try again.');
 		}
+
+		gameboard.setCellValue(row, column, activePlayer.marker);
 		
-		gameboard.resetBoard();
+		const isWin = winCombos.some(combo => combo.every(cell => gameboard.getCellValue(cell[0], cell[1]) === activePlayer.marker));
+		if (isWin) {
+			isTrue = false;
+			activePlayer.setWinCount();
+			alert(`${activePlayer.name} wins!`);
+		}
 	}
 
-	return { playRound };
+	return { gameboard, playRound };
+})();
 
-})()
+const displayController = (function (gameController) {
+
+	const gameboardElement = document.querySelector('#gameboard');
+	function updateScreen(gameboard) {
+		gameboardElement.innerHTML = '';
+
+		gameboard.forEach((row, rowIndex) => {
+			row.forEach((ele, columnIndex) => {
+				const cell = document.createElement('div');
+				cell.dataset.rowIndexNumber = rowIndex;
+				cell.dataset.columnIndexNumber = columnIndex;
+				cell.textContent = ele.getValue();
+				gameboardElement.append(cell);
+			});
+		});
+	}
+
+	function clickHandler() {
+		gameboardElement.addEventListener('click', e => {
+			const rowId = e.target.getAttribute('data-row-index-number');
+			const columnId = e.target.getAttribute('data-column-index-number');
+			gameController.playRound(rowId, columnId);
+			updateScreen(gameController.gameboard.getBoard());
+		});
+	}
+
+	updateScreen(gameController.gameboard.getBoard());
+	clickHandler();
+
+})(gameController);
