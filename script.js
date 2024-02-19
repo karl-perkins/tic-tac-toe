@@ -44,9 +44,11 @@ function createPlayer(name, marker) {
 	return { name, marker, getWinCount, setWinCount };
 }
 
-const gameController = (function (name1, name2) {
+const gameController = (function () {
+	const player1Name = prompt("Enter name for 1st player:");
+	const player2Name = prompt("Enter name for 2nd player:");
 	const gameboard = createGameboard();
-	const players = [ createPlayer(name1, 'X'), createPlayer(name2, 'O') ];
+	const players = [ createPlayer(player1Name, 'X'), createPlayer(player2Name, 'O') ];
 	const winCombos = [
 		//Row
 		[[0, 0], [0, 1], [0, 2]],
@@ -106,4 +108,4 @@ const gameController = (function (name1, name2) {
 
 	return { playRound };
 
-})('karl', 'simon')
+})()
