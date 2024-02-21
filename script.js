@@ -68,6 +68,7 @@ const gameController = (function () {
 	const getPlayer1 = () => players[0];
 	const getPlayer2 = () => players[1];
 
+	let roundNum = 0;
 	function playRound(row, column) {
 		if (gameboard.getCellValue(row, column) !== ' ') {
 			alert('Cell already populated. Please try again.');
@@ -79,9 +80,16 @@ const gameController = (function () {
 				isTrue = false;
 				activePlayer.setWinCount();
 				gameboard.resetBoard();
+				roundNum = 0;
 				alert(`${activePlayer.name} wins!`);
 			}
-			
+
+			roundNum += 1
+			if (roundNum > 9) {
+				alert('Tie. Board reset.');
+				gameboard.resetBoard();
+			}
+
 			activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
 		}
 	}
