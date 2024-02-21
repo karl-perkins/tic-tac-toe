@@ -65,6 +65,8 @@ const gameController = (function () {
 	
 	let activePlayer = players[0];
 	const getActivePlayer = () => activePlayer;
+	const getPlayer1 = () => players[0];
+	const getPlayer2 = () => players[1];
 
 	function playRound(row, column) {
 		if (gameboard.getCellValue(row, column) !== ' ') {
@@ -76,6 +78,7 @@ const gameController = (function () {
 			if (isWin) {
 				isTrue = false;
 				activePlayer.setWinCount();
+				gameboard.resetBoard();
 				alert(`${activePlayer.name} wins!`);
 			}
 			
@@ -83,7 +86,7 @@ const gameController = (function () {
 		}
 	}
 
-	return { gameboard, getActivePlayer, playRound };
+	return { gameboard, getActivePlayer, getPlayer1, getPlayer2, playRound };
 })();
 
 const displayController = (function (gameController) {
@@ -101,7 +104,11 @@ const displayController = (function (gameController) {
 				gameboardElement.append(cell);
 			});
 
-			document.querySelector('#player').textContent = gameController.getActivePlayer().name;
+			document.querySelector('#player1 > .name').textContent = gameController.getPlayer1().name;
+			document.querySelector('#player2 > .name').textContent = gameController.getPlayer2().name;
+
+			document.querySelector('#player1 > .score').textContent = gameController.getPlayer1().getWinCount();
+			document.querySelector('#player2 > .score').textContent = gameController.getPlayer2().getWinCount();
 		});
 	}
 
