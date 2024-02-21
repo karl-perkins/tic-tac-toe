@@ -67,21 +67,20 @@ const gameController = (function () {
 	const getActivePlayer = () => activePlayer;
 
 	function playRound(row, column) {
-		
 		if (gameboard.getCellValue(row, column) !== ' ') {
 			alert('Cell already populated. Please try again.');
+		} else {
+			gameboard.setCellValue(row, column, activePlayer.marker);
+			
+			const isWin = winCombos.some(combo => combo.every(cell => gameboard.getCellValue(cell[0], cell[1]) === activePlayer.marker));
+			if (isWin) {
+				isTrue = false;
+				activePlayer.setWinCount();
+				alert(`${activePlayer.name} wins!`);
+			}
+			
+			activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
 		}
-
-		gameboard.setCellValue(row, column, activePlayer.marker);
-		
-		const isWin = winCombos.some(combo => combo.every(cell => gameboard.getCellValue(cell[0], cell[1]) === activePlayer.marker));
-		if (isWin) {
-			isTrue = false;
-			activePlayer.setWinCount();
-			alert(`${activePlayer.name} wins!`);
-		}
-		
-		activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
 	}
 
 	return { gameboard, getActivePlayer, playRound };
