@@ -63,10 +63,11 @@ const gameController = (function () {
 		[[0, 2], [1, 1], [2, 0]],
 	];
 	
-	let activePlayer;
-	function playRound(row, column) {
-		 activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
+	let activePlayer = players[0];
+	const getActivePlayer = () => activePlayer;
 
+	function playRound(row, column) {
+		
 		if (gameboard.getCellValue(row, column) !== ' ') {
 			alert('Cell already populated. Please try again.');
 		}
@@ -79,9 +80,11 @@ const gameController = (function () {
 			activePlayer.setWinCount();
 			alert(`${activePlayer.name} wins!`);
 		}
+		
+		activePlayer = (activePlayer === players[0]) ? players[1] : players[0];
 	}
 
-	return { gameboard, playRound };
+	return { gameboard, getActivePlayer, playRound };
 })();
 
 const displayController = (function (gameController) {
@@ -98,6 +101,8 @@ const displayController = (function (gameController) {
 				cell.textContent = ele.getValue();
 				gameboardElement.append(cell);
 			});
+
+			document.querySelector('#player').textContent = gameController.getActivePlayer().name;
 		});
 	}
 
@@ -109,6 +114,7 @@ const displayController = (function (gameController) {
 			updateScreen(gameController.gameboard.getBoard());
 		});
 	}
+
 
 	updateScreen(gameController.gameboard.getBoard());
 	clickHandler();
