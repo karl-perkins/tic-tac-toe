@@ -8,21 +8,10 @@ function createGameboard() {
 		}
 	}
 
-	function resetBoard() {
-		gameboard.forEach(row => row.forEach(cell => cell.setValue(' ')));
-	}
-
-	function getBoard() {
-		return gameboard;
-	};
-
-	function setCellValue(rowId, columnId, value) {
-		gameboard[rowId][columnId].setValue(value);
-	}
-
-	function getCellValue(rowId, columnId) {
-		return gameboard[rowId][columnId].getValue();
-	}
+	const resetBoard = () => gameboard.forEach(row => row.forEach(cell => cell.setValue(' ')));
+	const getBoard = () => gameboard;
+	const setCellValue = (rowId, columnId, value) => gameboard[rowId][columnId].setValue(value);
+	const getCellValue = (rowId, columnId) => gameboard[rowId][columnId].getValue();
 
 	return { resetBoard, getBoard, setCellValue, getCellValue };
 }
@@ -112,9 +101,6 @@ const displayController = (function () {
 				gameboardElement.append(cell);
 			});
 
-			document.querySelector('#player1 > .name').textContent = game.getPlayer1().name;
-			document.querySelector('#player2 > .name').textContent = game.getPlayer2().name;
-
 			document.querySelector('#player1 > .score').textContent = game.getPlayer1().getWinCount();
 			document.querySelector('#player2 > .score').textContent = game.getPlayer2().getWinCount();
 		});
@@ -132,6 +118,8 @@ const displayController = (function () {
 		e.preventDefault();
 		const formData = new FormData(formElement);
 		game = gameController(formData.get('player1Name'), formData.get('player2Name'));
+		document.querySelector('#player1 > .name').textContent = game.getPlayer1().name;
+		document.querySelector('#player2 > .name').textContent = game.getPlayer2().name;
 		updateScreen(game.getBoard());
 	})
 })();
