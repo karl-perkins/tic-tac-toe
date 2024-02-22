@@ -73,6 +73,7 @@ const gameController = (function () {
 		if (gameboard.getCellValue(row, column) !== ' ') {
 			alert('Cell already populated. Please try again.');
 		} else {
+			roundNum += 1
 			gameboard.setCellValue(row, column, activePlayer.marker);
 			
 			const isWin = winCombos.some(combo => combo.every(cell => gameboard.getCellValue(cell[0], cell[1]) === activePlayer.marker));
@@ -84,7 +85,6 @@ const gameController = (function () {
 				alert(`${activePlayer.name} wins!`);
 			}
 
-			roundNum += 1
 			if (roundNum > 8) {
 				alert('Tie. Board reset.');
 				roundNum = 0;
