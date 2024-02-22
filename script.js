@@ -95,6 +95,7 @@ const displayController = (function () {
 		gameboard.forEach((row, rowIndex) => {
 			row.forEach((ele, columnIndex) => {
 				const cell = document.createElement('div');
+				cell.classList.add('cell');
 				cell.dataset.rowIndexNumber = rowIndex;
 				cell.dataset.columnIndexNumber = columnIndex;
 				cell.textContent = ele.getValue();
@@ -107,10 +108,12 @@ const displayController = (function () {
 	}
 
 	gameboardElement.addEventListener('click', e => {
-		const rowId = e.target.getAttribute('data-row-index-number');
-		const columnId = e.target.getAttribute('data-column-index-number');
-		game.playRound(rowId, columnId);
-		updateScreen(game.getBoard());
+		if (e.target.classList.contains('cell')) {
+			const rowId = e.target.getAttribute('data-row-index-number');
+			const columnId = e.target.getAttribute('data-column-index-number');
+			game.playRound(rowId, columnId);
+			updateScreen(game.getBoard());
+		}
 	});
 
 	const formElement = document.querySelector('form');
