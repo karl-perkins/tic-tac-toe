@@ -1,3 +1,11 @@
+#gameboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
 #gameboard {
   width: 200px;
   height: 200px;
