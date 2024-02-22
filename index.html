@@ -9,17 +9,27 @@
 	</head>
 	<body>
 		<div class="container">
-			<div id="player1" class="player">
-				<div class="name"></div>
-				<div class="score"></div>
-			</div>
-			<div id="gameboard-wrapper">
+			<form>
+				<div class="form-group">
+					<label for="player-1-name">Player 1 Name:</label>
+					<input type="text" name="player1Name" id="player-1-name" required>
+				</div>
+				<div class="form-group">
+					<label for="player-2-name">Player 2 Name:</label>
+					<input type="text" name="player2Name" id="player-2-name" required>
+				</div>
+				<button type="submit">Start/Restart</button>
+			</form>
+			<div id="game-wrapper">
+				<div id="player1" class="player">
+					<div class="name"></div>
+					<div class="score"></div>
+				</div>
 				<div id="gameboard"></div>
-				<button id="restart-button">Start/Restart</button>
-			</div>
-			<div id="player2" class="player">
-				<div class="name"></div>
-				<div class="score"></div>
+				<div id="player2" class="player">
+					<div class="name"></div>
+					<div class="score"></div>
+				</div>
 			</div>
 		</div>
 	</body>

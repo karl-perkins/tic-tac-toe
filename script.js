@@ -42,9 +42,7 @@ function createPlayer(name, marker) {
 	return { name, marker, getWinCount, setWinCount };
 }
 
-const gameController = (function () {
-	const player1Name = 'karl';//prompt("Enter name for 1st player:");
-	const player2Name = 'simon';//prompt("Enter name for 2nd player:");
+function gameController (player1Name, player2Name) {
 	const gameboard = createGameboard();
 	const players = [ createPlayer(player1Name, 'X'), createPlayer(player2Name, 'O') ];
 	const winCombos = [
@@ -96,9 +94,10 @@ const gameController = (function () {
 	}
 
 	return { gameboard, getActivePlayer, getPlayer1, getPlayer2, playRound };
-})();
+};
 
-const displayController = (function (gameController) {
+const displayController = (function () {
+	let game;
 
 	const gameboardElement = document.querySelector('#gameboard');
 	function updateScreen(gameboard) {
@@ -113,11 +112,11 @@ const displayController = (function (gameController) {
 				gameboardElement.append(cell);
 			});
 
-			document.querySelector('#player1 > .name').textContent = gameController.getPlayer1().name;
-			document.querySelector('#player2 > .name').textContent = gameController.getPlayer2().name;
+			document.querySelector('#player1 > .name').textContent = game.getPlayer1().name;
+			document.querySelector('#player2 > .name').textContent = game.getPlayer2().name;
 
-			document.querySelector('#player1 > .score').textContent = gameController.getPlayer1().getWinCount();
-			document.querySelector('#player2 > .score').textContent = gameController.getPlayer2().getWinCount();
+			document.querySelector('#player1 > .score').textContent = game.getPlayer1().getWinCount();
+			document.querySelector('#player2 > .score').textContent = game.getPlayer2().getWinCount();
 		});
 	}
 
@@ -125,13 +124,17 @@ const displayController = (function (gameController) {
 		gameboardElement.addEventListener('click', e => {
 			const rowId = e.target.getAttribute('data-row-index-number');
 			const columnId = e.target.getAttribute('data-column-index-number');
-			gameController.playRound(rowId, columnId);
-			updateScreen(gameController.gameboard.getBoard());
+			game.playRound(rowId, columnId);
+			updateScreen(game.gameboard.getBoard());
 		});
 	}
 
-
-	updateScreen(gameController.gameboard.getBoard());
-	clickHandler();
-
-})(gameController);
+	const formElement = document.querySelector('form');
+	formElement.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const formData = new FormData(formElement);
+		game = gameController(formData.get('player1Name'), formData.get('player2Name'));
+		updateScreen(game.gameboard.getBoard());
+		clickHandler();
+	})
+})();
