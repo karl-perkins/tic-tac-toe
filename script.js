@@ -93,7 +93,7 @@ function gameController (player1Name, player2Name) {
 		}
 	}
 
-	return { gameboard, getActivePlayer, getPlayer1, getPlayer2, playRound };
+	return { getBoard: gameboard.getBoard, getActivePlayer, getPlayer1, getPlayer2, playRound };
 };
 
 const displayController = (function () {
@@ -124,7 +124,7 @@ const displayController = (function () {
 		const rowId = e.target.getAttribute('data-row-index-number');
 		const columnId = e.target.getAttribute('data-column-index-number');
 		game.playRound(rowId, columnId);
-		updateScreen(game.gameboard.getBoard());
+		updateScreen(game.getBoard());
 	});
 
 	const formElement = document.querySelector('form');
@@ -132,6 +132,6 @@ const displayController = (function () {
 		e.preventDefault();
 		const formData = new FormData(formElement);
 		game = gameController(formData.get('player1Name'), formData.get('player2Name'));
-		updateScreen(game.gameboard.getBoard());
+		updateScreen(game.getBoard());
 	})
 })();
