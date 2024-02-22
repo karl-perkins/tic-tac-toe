@@ -120,14 +120,12 @@ const displayController = (function () {
 		});
 	}
 
-	function clickHandler() {
-		gameboardElement.addEventListener('click', e => {
-			const rowId = e.target.getAttribute('data-row-index-number');
-			const columnId = e.target.getAttribute('data-column-index-number');
-			game.playRound(rowId, columnId);
-			updateScreen(game.gameboard.getBoard());
-		});
-	}
+	gameboardElement.addEventListener('click', e => {
+		const rowId = e.target.getAttribute('data-row-index-number');
+		const columnId = e.target.getAttribute('data-column-index-number');
+		game.playRound(rowId, columnId);
+		updateScreen(game.gameboard.getBoard());
+	});
 
 	const formElement = document.querySelector('form');
 	formElement.addEventListener('submit', (e) => {
@@ -135,6 +133,5 @@ const displayController = (function () {
 		const formData = new FormData(formElement);
 		game = gameController(formData.get('player1Name'), formData.get('player2Name'));
 		updateScreen(game.gameboard.getBoard());
-		clickHandler();
 	})
 })();
