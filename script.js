@@ -87,6 +87,7 @@ const gameController = (function () {
 			roundNum += 1
 			if (roundNum > 8) {
 				alert('Tie. Board reset.');
+				roundNum = 0;
 				gameboard.resetBoard();
 			}
 
